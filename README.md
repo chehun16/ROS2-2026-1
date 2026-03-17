@@ -1,4 +1,4 @@
-# APEX — Autonomous Perception and EXploration
+# Autonomous Perception and Exploration
 
 > ROS2 Humble 기반 자율 탐색 + LiDAR-Camera Fusion + YOLOv8 + Semantic Costmap
 > Ubuntu 22.04 LTS
