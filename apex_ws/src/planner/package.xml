@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>planner</name>
+  <version>0.1.0</version>
+  <description>Planner node for APEX: integrates exploration goals and detection results for Nav2</description>
+  <maintainer email="user@example.com">user</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <depend>action_msgs</depend>
+  <depend>msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

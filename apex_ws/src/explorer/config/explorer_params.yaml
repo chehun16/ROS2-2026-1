@@ -1,0 +1,4 @@
+explorer_node:
+  ros__parameters:
+    exploration_rate: 1.0          # frontier 탐색 주기 (Hz) — 낮을수록 CPU 절약
+    min_frontier_distance: 0.5     # 이 거리 이내 frontier는 무시 (m)

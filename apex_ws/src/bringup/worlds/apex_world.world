@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="apex_world">
+
+    <!-- 조명 -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- 바닥 -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- 물리 설정 -->
+    <physics type="ode">
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- ── 외벽 (6x6m 방) ──────────────────────────────────── -->
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 3 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
+          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -3 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
+          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_east">
+      <static>true</static>
+      <pose>3 0 0.5 0 0 1.5708</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
+          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_west">
+      <static>true</static>
+      <pose>-3 0 0.5 0 0 1.5708</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
+          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ── 내부 장애물 (navigation 난이도용) ──────────────── -->
+    <model name="box_obstacle_1">
+      <static>true</static>
+      <pose>1.0 0.5 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 0.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.5 0.5 0.5</size></box></geometry>
+          <material><ambient>0.4 0.2 0.1 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="box_obstacle_2">
+      <static>true</static>
+      <pose>-1.2 -0.8 0.25 0 0 0.5</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.6 0.3 0.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.6 0.3 0.5</size></box></geometry>
+          <material><ambient>0.3 0.3 0.5 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="box_obstacle_3">
+      <static>true</static>
+      <pose>0.5 -1.8 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 0.4 0.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 0.4 0.5</size></box></geometry>
+          <material><ambient>0.2 0.4 0.2 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ── 탐지 목표 물체: Coke Can × 3 (YOLO: bottle/cup) ── -->
+    <!-- Gazebo 표준 coke_can 모델 사용 -->
+    <include>
+      <uri>model://coke_can</uri>
+      <name>coke_can_1</name>
+      <pose>2.0 2.0 0.0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://coke_can</uri>
+      <name>coke_can_2</name>
+      <pose>-2.0 1.5 0.0 0 0 1.0</pose>
+    </include>
+
+    <include>
+      <uri>model://coke_can</uri>
+      <name>coke_can_3</name>
+      <pose>1.5 -2.0 0.0 0 0 0.5</pose>
+    </include>
+
+  </world>
+</sdf>

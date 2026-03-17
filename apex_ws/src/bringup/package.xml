@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>bringup</name>
+  <version>0.1.0</version>
+  <description>Bringup package for APEX: launch files, configs, and Gazebo worlds</description>
+  <maintainer email="user@example.com">user</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>msgs</depend>
+
+  <exec_depend>slam</exec_depend>
+  <exec_depend>perception</exec_depend>
+  <exec_depend>explorer</exec_depend>
+  <exec_depend>planner</exec_depend>
+  <exec_depend>viz</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>turtlebot3_gazebo</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

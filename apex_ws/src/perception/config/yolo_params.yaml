@@ -1,0 +1,9 @@
+perception_node:
+  ros__parameters:
+    model_path: "yolov8n.pt"      # YOLOv8 nano (속도 우선)
+    target_classes: ["person", "bottle", "chair"]  # 탐지 대상
+    confidence_threshold: 0.5
+    image_topic: "/camera/image_raw"
+    camera_info_topic: "/camera/camera_info"
+    detection_topic: "/perception/detections"
+    debug_image_topic: "/perception/debug_image"

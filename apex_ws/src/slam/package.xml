@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>slam</name>
+  <version>0.1.0</version>
+  <description>SLAM node for APEX - LiDAR based real-time mapping</description>
+  <maintainer email="user@example.com">user</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>slam_toolbox</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
