@@ -101,16 +101,30 @@ def generate_launch_description():
         }.items()
     )
 
-    # ── Nav2 ───────────────────────────────────────────────────
-    nav2 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(nav2_bringup_dir, 'launch', 'navigation_launch.py')
-        ),
-        launch_arguments={
+    # ── Nav2 (collision_monitor 제외하고 직접 노드 실행) ───────
+    nav2_params = os.path.join(bringup_dir, 'config', 'nav2_params.yaml')
+
+    nav2_controller   = Node(package='nav2_controller',       executable='controller_server',  output='screen', parameters=[nav2_params])
+    nav2_smoother     = Node(package='nav2_smoother',          executable='smoother_server',    output='screen', parameters=[nav2_params])
+    nav2_planner      = Node(package='nav2_planner',           executable='planner_server',     output='screen', parameters=[nav2_params])
+    nav2_behaviors    = Node(package='nav2_behaviors',         executable='behavior_server',    output='screen', parameters=[nav2_params])
+    nav2_bt           = Node(package='nav2_bt_navigator',      executable='bt_navigator',       output='screen', parameters=[nav2_params])
+    nav2_waypoint     = Node(package='nav2_waypoint_follower', executable='waypoint_follower',  output='screen', parameters=[nav2_params])
+    nav2_vel_smoother = Node(package='nav2_velocity_smoother', executable='velocity_smoother',  output='screen', parameters=[nav2_params])
+    nav2_lifecycle    = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='lifecycle_manager_navigation',
+        output='screen',
+        parameters=[{
             'use_sim_time': use_sim_time,
-            'params_file': os.path.join(bringup_dir, 'config', 'nav2_params.yaml'),
-            'use_collision_monitor': 'False'
-        }.items()
+            'autostart': True,
+            'node_names': [
+                'controller_server', 'smoother_server', 'planner_server',
+                'behavior_server', 'bt_navigator', 'waypoint_follower',
+                'velocity_smoother'
+            ]
+        }]
     )
 
     # ── APEX Nodes ─────────────────────────────────────────────
@@ -200,7 +214,14 @@ def generate_launch_description():
         robot_state_publisher,
         spawn_robot,
         slam,
-        nav2,
+        nav2_controller,
+        nav2_smoother,
+        nav2_planner,
+        nav2_behaviors,
+        nav2_bt,
+        nav2_waypoint,
+        nav2_vel_smoother,
+        nav2_lifecycle,
         slam_node,
         perception_node,
         explorer_node,
