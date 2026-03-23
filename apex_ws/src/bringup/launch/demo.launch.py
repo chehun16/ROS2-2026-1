@@ -42,7 +42,7 @@ def generate_launch_description():
 
     # ── Gazebo Harmonic ────────────────────────────────────────
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '-r', '--verbose', world_file],
+        cmd=['gz', 'sim', '-r', '--verbose', 'apex_world.world'],
         additional_env={'GZ_SIM_RESOURCE_PATH': os.path.join(bringup_dir, 'worlds')},
         output='screen'
     )
