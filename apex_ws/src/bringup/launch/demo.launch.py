@@ -49,6 +49,7 @@ def generate_launch_description():
     )
 
     # ROS2 ↔ Gazebo Harmonic 브리지
+    # 로봇은 world 파일에 내장 (DiffDrive 플러그인이 odom/tf 직접 publish)
     clock_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -60,10 +61,13 @@ def generate_launch_description():
             '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
             '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
             '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',
+            '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
         ],
         output='screen'
     )
 
+    # robot_state_publisher: URDF 기반 정적 TF 트리
+    # 로봇 스폰은 world 파일에서 처리
     urdf_path = os.path.join(
         get_package_share_directory('turtlebot3_description'),
         'urdf', 'turtlebot3_waffle_pi.urdf'
@@ -75,13 +79,6 @@ def generate_launch_description():
             'use_sim_time': use_sim_time,
             'robot_description': open(urdf_path).read()
         }],
-        output='screen'
-    )
-    spawn_robot = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=['-name', 'turtlebot3_waffle_pi', '-file', urdf_path,
-                   '-x', '0.0', '-y', '0.0', '-z', '0.01'],
         output='screen'
     )
 
@@ -189,7 +186,6 @@ def generate_launch_description():
         gazebo,
         clock_bridge,
         robot_state_publisher,
-        spawn_robot,
         slam,
         nav2_controller,
         nav2_smoother,
