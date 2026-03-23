@@ -231,7 +231,7 @@ collision_monitor:
     base_shift_correction: true
     stop_pub_timeout: 2.0
     polygons: []
-    observation_sources: []
+    observation_sources: ""
 
 lifecycle_manager:
   ros__parameters:
