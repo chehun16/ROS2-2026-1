@@ -108,7 +108,8 @@ def generate_launch_description():
         ),
         launch_arguments={
             'use_sim_time': use_sim_time,
-            'params_file': os.path.join(bringup_dir, 'config', 'nav2_params.yaml')
+            'params_file': os.path.join(bringup_dir, 'config', 'nav2_params.yaml'),
+            'use_collision_monitor': 'False'
         }.items()
     )
 
