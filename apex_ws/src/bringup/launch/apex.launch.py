@@ -43,19 +43,24 @@ def generate_launch_description():
     )
 
     # ── Gazebo Harmonic: 커스텀 월드로 실행 ───────────────────
-    set_gz_resource_path = SetEnvironmentVariable(
-        'GZ_SIM_RESOURCE_PATH', os.path.join(bringup_dir, 'worlds')
-    )
     gazebo = ExecuteProcess(
         cmd=['gz', 'sim', '-r', '--verbose', world_file],
         output='screen'
     )
 
-    # /clock 브리지 (sim time 동기화)
+    # ROS2 ↔ Gazebo Harmonic 브리지
     clock_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        arguments=[
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',
+        ],
         output='screen'
     )
 
@@ -208,7 +213,6 @@ def generate_launch_description():
         declare_use_sim_time,
         declare_model,
         set_tb3_model,
-        set_gz_resource_path,
         gazebo,
         clock_bridge,
         robot_state_publisher,
