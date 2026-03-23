@@ -38,7 +38,9 @@ def generate_launch_description():
     set_tb3_model = SetEnvironmentVariable('TURTLEBOT3_MODEL', 'waffle_pi')
 
     bringup_dir = get_package_share_directory('bringup')
-    world_file  = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
+    world_file  = os.path.realpath(
+        os.path.join(bringup_dir, 'worlds', 'apex_world.world')
+    )
 
     # ── Gazebo Harmonic ────────────────────────────────────────
     set_gz_resource_path = SetEnvironmentVariable(

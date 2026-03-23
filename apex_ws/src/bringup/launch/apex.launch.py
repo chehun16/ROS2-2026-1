@@ -38,7 +38,9 @@ def generate_launch_description():
     # ── 패키지 경로 ────────────────────────────────────────────
     bringup_dir      = get_package_share_directory('bringup')
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
-    world_file       = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
+    world_file       = os.path.realpath(
+        os.path.join(bringup_dir, 'worlds', 'apex_world.world')
+    )
 
     # ── Gazebo Harmonic: 커스텀 월드로 실행 ───────────────────
     set_gz_resource_path = SetEnvironmentVariable(
