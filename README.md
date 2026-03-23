@@ -1,7 +1,17 @@
 # Autonomous Perception and Exploration
 
-> ROS2 Humble | Autonomous Navigation + LiDAR-Camera Fusion + YOLOv8 + Semantic Costmap
-> Ubuntu 22.04 LTS
+> ROS2 Jazzy | Autonomous Navigation + LiDAR-Camera Fusion + YOLOv8 + Semantic Costmap
+> Ubuntu 24.04 LTS
+
+| Component | Version |
+|-----------|---------|
+| Ubuntu | 24.04 LTS |
+| ROS2 | Jazzy Jalisco |
+| Python | 3.12 |
+| Gazebo | Harmonic (gz sim) |
+| SLAM Toolbox | 2.8.x (ros-jazzy-slam-toolbox) |
+| Nav2 | 1.3.x (ros-jazzy-navigation2) |
+| YOLOv8 (ultralytics) | ≥ 8.0.0 |
 
 ---
 
@@ -11,7 +21,7 @@ An autonomous robot system that explores unknown environments, detects target ob
 
 ```
 Sensors:  LiDAR + Camera
-Sim:      Gazebo Classic + Turtlebot3 waffle_pi
+Sim:      Gazebo Harmonic + Turtlebot3 waffle_pi
 Mapping:  SLAM Toolbox (real-time)
 Planning: Nav2 (dynamic replanning with Semantic Costmap)
 ML:       YOLOv8 (object detection)
@@ -47,7 +57,7 @@ Camera ──▶ YOLOv8 + LiDAR Fusion ──▶ /perception/detections ──�
 
 ---
 
-## Environment Setup (Ubuntu 22.04, run in order)
+## Environment Setup (Ubuntu 24.04, run in order)
 
 ### Step 1. Clone the Repository
 
@@ -58,7 +68,7 @@ git clone https://github.com/chehun16/ROS2-2026-1.git
 
 ---
 
-### Step 2. Install ROS2 Humble
+### Step 2. Install ROS2 Jazzy
 
 ```bash
 # Set locale
@@ -75,12 +85,12 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
   http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
   | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-# Install ROS2 Humble
+# Install ROS2 Jazzy
 sudo apt update
-sudo apt install -y ros-humble-desktop
+sudo apt install -y ros-jazzy-desktop
 
 # Register environment variable
-echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -89,19 +99,13 @@ source ~/.bashrc
 ### Step 3. Install Gazebo + Turtlebot3
 
 ```bash
-# Gazebo Classic 11
-sudo apt install -y gazebo libgazebo-dev
-
-# Gazebo-ROS integration plugins
-sudo apt install -y \
-  ros-humble-gazebo-ros-pkgs \
-  ros-humble-gazebo-ros2-control
+# Gazebo Harmonic
+sudo apt install -y ros-jazzy-ros-gz
 
 # Turtlebot3
 sudo apt install -y \
-  ros-humble-turtlebot3 \
-  ros-humble-turtlebot3-simulations \
-  ros-humble-turtlebot3-gazebo
+  ros-jazzy-turtlebot3 \
+  ros-jazzy-turtlebot3-simulations
 
 # Register environment variable (waffle_pi has both LiDAR and Camera)
 echo "export TURTLEBOT3_MODEL=waffle_pi" >> ~/.bashrc
@@ -114,11 +118,11 @@ source ~/.bashrc
 
 ```bash
 sudo apt install -y \
-  ros-humble-slam-toolbox \
-  ros-humble-navigation2 \
-  ros-humble-nav2-bringup \
-  ros-humble-dwb-core \
-  ros-humble-nav2-dwb-controller
+  ros-jazzy-slam-toolbox \
+  ros-jazzy-navigation2 \
+  ros-jazzy-nav2-bringup \
+  ros-jazzy-dwb-core \
+  ros-jazzy-nav2-dwb-controller
 ```
 
 ---
@@ -134,15 +138,15 @@ sudo apt install -y \
 
 # ROS2 Python packages
 sudo apt install -y \
-  ros-humble-cv-bridge \
-  ros-humble-tf2-ros \
-  ros-humble-tf2-geometry-msgs \
-  ros-humble-robot-state-publisher \
-  ros-humble-vision-msgs
+  ros-jazzy-cv-bridge \
+  ros-jazzy-tf2-ros \
+  ros-jazzy-tf2-geometry-msgs \
+  ros-jazzy-robot-state-publisher \
+  ros-jazzy-vision-msgs
 
 # YOLOv8
 pip3 install --upgrade pip
-pip3 install ultralytics
+pip3 install "ultralytics>=8.0.0"
 
 # Initialize rosdep (first time only)
 sudo rosdep init
@@ -238,7 +242,7 @@ apex_ws/src/
     │   ├── nav2_params.yaml
     │   └── apex.rviz
     └── worlds/
-        └── apex_world.world     # Gazebo simulation environment
+        └── apex_world.world     # Gazebo simulation environment (10×10m)
 ```
 
 ---
@@ -270,6 +274,9 @@ apex_ws/src/
 |-------|------|----------|
 | `chair`, `couch`, `bed`, `tv`, `dining table` | **AVOID** | Add virtual obstacle ring to Costmap → reroute path |
 | `person`, `bottle`, `cup`, `cell phone`, `laptop` | **APPROACH** | Planner navigates directly to the target |
+
+> **Simulation targets:** `coke_can` × 5 (detected as `bottle`), `cafe_table` × 2 (detected as `dining table`)
+> **Confidence threshold:** 0.35 (lowered for Gazebo model textures)
 
 ---
 
@@ -304,7 +311,7 @@ ros2 topic hz /camera/camera_info
 
 **YOLO detection not working**
 ```bash
-# Lower confidence threshold (default 0.5)
+# Lower confidence threshold (default 0.35)
 # Edit confidence_threshold in perception/config/yolo_params.yaml
 
 # Manually download YOLOv8 model

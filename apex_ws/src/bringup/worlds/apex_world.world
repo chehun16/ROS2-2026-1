@@ -19,96 +19,182 @@
       <real_time_factor>1</real_time_factor>
     </physics>
 
-    <!-- ── 외벽 (6x6m 방) ──────────────────────────────────── -->
+    <!--
+      환경 레이아웃 (10×10m):
+
+          -5          0    +1          +5
+      +5  +─────────────────────────────+
+          │  [can2]         │  [can4]  │
+          │                 │          │
+          │  [table2]  gap  │  [can5]  │
+      +1  │                 ╵          │
+          │        [box1]              │
+       0  │   ●robot                   │
+          │        [box2]   ╷          │
+      -1  │                 │          │
+          │  [can1]  [box3] │  [can3]  │
+          │                 │  [table1]│
+          │  [can_c] [box4] │          │
+      -5  +─────────────────────────────+
+
+      내부 격벽: x=+1.0, y=-5 ~ y=+0.8 (북쪽에 3.2m 통로)
+      로봇이 서쪽에서 출발해 통로를 통해 동쪽 탐색
+    -->
+
+    <!-- ── 외벽 (10×10m 방) ──────────────────────────────── -->
     <model name="wall_north">
       <static>true</static>
-      <pose>0 3 0.5 0 0 0</pose>
+      <pose>0 5 0.5 0 0 0</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
-          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_south">
       <static>true</static>
-      <pose>0 -3 0.5 0 0 0</pose>
+      <pose>0 -5 0.5 0 0 0</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
-          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_east">
       <static>true</static>
-      <pose>3 0 0.5 0 0 1.5708</pose>
+      <pose>5 0 0.5 0 0 1.5708</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
-          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_west">
       <static>true</static>
-      <pose>-3 0 0.5 0 0 1.5708</pose>
+      <pose>-5 0 0.5 0 0 1.5708</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
-          <material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
+        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
-    <!-- ── 내부 장애물 (navigation 난이도용) ──────────────── -->
+    <!-- ── 내부 격벽: x=1.0, y=-5 ~ y=-0.8 ─────────────────
+         북쪽에 약 3.8m 통로를 남겨 동쪽 구역 진입 유도
+         (로봇은 서쪽(x<1)에서 출발, 동쪽(x>1)을 탐색해야 함)
+    ─────────────────────────────────────────────────────── -->
+    <model name="partition_wall">
+      <static>true</static>
+      <!-- 중심: y = (-5 + (-0.8)) / 2 = -2.9, 길이 4.2m -->
+      <pose>1.0 -2.9 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.1 4.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.1 4.2 1</size></box></geometry>
+          <material><ambient>0.7 0.5 0.3 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ── 내부 박스 장애물 ──────────────────────────────── -->
     <model name="box_obstacle_1">
       <static>true</static>
-      <pose>1.0 0.5 0.25 0 0 0</pose>
+      <pose>-0.5 0.8 0.3 0 0 0.4</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>0.5 0.5 0.5</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.5 0.5 0.5</size></box></geometry>
+        <collision name="col"><geometry><box><size>0.6 0.6 0.6</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.6 0.6 0.6</size></box></geometry>
           <material><ambient>0.4 0.2 0.1 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="box_obstacle_2">
       <static>true</static>
-      <pose>-1.2 -0.8 0.25 0 0 0.5</pose>
+      <pose>-1.5 -0.5 0.3 0 0 0</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>0.6 0.3 0.5</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.6 0.3 0.5</size></box></geometry>
+        <collision name="col"><geometry><box><size>0.8 0.3 0.6</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.8 0.3 0.6</size></box></geometry>
           <material><ambient>0.3 0.3 0.5 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="box_obstacle_3">
       <static>true</static>
-      <pose>0.5 -1.8 0.25 0 0 0</pose>
+      <pose>-2.0 -3.0 0.3 0 0 0.8</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>0.4 0.4 0.5</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.4 0.4 0.5</size></box></geometry>
+        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.5 0.5 0.6</size></box></geometry>
           <material><ambient>0.2 0.4 0.2 1</ambient></material></visual>
       </link>
     </model>
 
-    <!-- ── 탐지 목표 물체: Coke Can × 3 (YOLO: bottle/cup) ── -->
-    <!-- Gazebo 표준 coke_can 모델 사용 -->
+    <model name="box_obstacle_4">
+      <static>true</static>
+      <pose>-0.8 -2.5 0.3 0 0 0.2</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 0.7 0.6</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 0.7 0.6</size></box></geometry>
+          <material><ambient>0.5 0.4 0.1 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ── APPROACH 탐지 목표: coke_can × 5 ─────────────────
+         YOLO yolov8n 기준 "bottle" 클래스로 탐지
+         배치 원칙: 직접 보이지 않는 위치 → 탐색해야 발견
+    ─────────────────────────────────────────────────────── -->
+
+    <!-- 서쪽 하단 구석 -->
     <include>
       <uri>model://coke_can</uri>
       <name>coke_can_1</name>
-      <pose>2.0 2.0 0.0 0 0 0</pose>
+      <pose>-3.5 -3.5 0.0 0 0 0</pose>
     </include>
 
+    <!-- 서쪽 상단 -->
     <include>
       <uri>model://coke_can</uri>
       <name>coke_can_2</name>
-      <pose>-2.0 1.5 0.0 0 0 1.0</pose>
+      <pose>-3.0 3.5 0.0 0 0 1.0</pose>
     </include>
 
+    <!-- 동쪽 하단 (격벽 뒤 — 탐색해야 발견) -->
     <include>
       <uri>model://coke_can</uri>
       <name>coke_can_3</name>
-      <pose>1.5 -2.0 0.0 0 0 0.5</pose>
+      <pose>3.0 -3.0 0.0 0 0 0.5</pose>
+    </include>
+
+    <!-- 동쪽 상단 -->
+    <include>
+      <uri>model://coke_can</uri>
+      <name>coke_can_4</name>
+      <pose>3.5 3.0 0.0 0 0 2.0</pose>
+    </include>
+
+    <!-- 통로 입구 근처 (탐색 초기 발견 유도) -->
+    <include>
+      <uri>model://coke_can</uri>
+      <name>coke_can_5</name>
+      <pose>2.0 1.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- ── AVOID 목표: cafe_table × 2 ───────────────────────
+         YOLO "dining table" 클래스로 탐지 시 Costmap 장애물 주입
+         경로를 막는 위치에 배치 → semantic 우회 데모
+    ─────────────────────────────────────────────────────── -->
+
+    <!-- 동쪽 구역 입구를 부분 차단 (우회 경로 생성) -->
+    <include>
+      <uri>model://cafe_table</uri>
+      <name>cafe_table_1</name>
+      <pose>2.5 -1.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- 서쪽 중앙 통로 좁힘 -->
+    <include>
+      <uri>model://cafe_table</uri>
+      <name>cafe_table_2</name>
+      <pose>-2.5 1.5 0.0 0 0 1.5708</pose>
     </include>
 
   </world>

@@ -1,8 +1,8 @@
 perception_node:
   ros__parameters:
     model_path: "yolov8n.pt"      # YOLOv8 nano (속도 우선)
-    target_classes: ["person", "bottle", "chair"]  # 탐지 대상
-    confidence_threshold: 0.5
+    target_classes: ["person", "bottle", "cup", "chair", "dining table", "couch", "laptop", "cell phone"]
+    confidence_threshold: 0.35   # Gazebo 모델은 실사 데이터와 달라 낮게 설정
     image_topic: "/camera/image_raw"
     camera_info_topic: "/camera/camera_info"
     detection_topic: "/perception/detections"
