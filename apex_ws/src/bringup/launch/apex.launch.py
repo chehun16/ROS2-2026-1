@@ -40,14 +40,17 @@ def generate_launch_description():
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     world_file       = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
 
-    # ── Gazebo: 커스텀 월드로 실행 ─────────────────────────────
-    # turtlebot3_gazebo launch 대신 직접 Gazebo를 실행해 world를 지정
+    # ── Gazebo Harmonic: 커스텀 월드로 실행 ───────────────────
     gazebo = ExecuteProcess(
-        cmd=[
-            'gazebo', '--verbose', world_file,
-            '-s', 'libgazebo_ros_factory.so',
-            '-s', 'libgazebo_ros_init.so',
-        ],
+        cmd=['gz', 'sim', '--verbose', world_file],
+        output='screen'
+    )
+
+    # /clock 브리지 (sim time 동기화)
+    clock_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
         output='screen'
     )
 
@@ -67,12 +70,12 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Turtlebot3 Gazebo 스폰
+    # Turtlebot3 Gazebo 스폰 (Gazebo Harmonic)
     spawn_robot = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
+        package='ros_gz_sim',
+        executable='create',
         arguments=[
-            '-entity', 'turtlebot3_waffle_pi',
+            '-name', 'turtlebot3_waffle_pi',
             '-file', urdf_path,
             '-x', '0.0', '-y', '0.0', '-z', '0.01'
         ],
@@ -186,6 +189,7 @@ def generate_launch_description():
         declare_model,
         set_tb3_model,
         gazebo,
+        clock_bridge,
         robot_state_publisher,
         spawn_robot,
         slam,

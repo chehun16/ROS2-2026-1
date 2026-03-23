@@ -40,13 +40,17 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('bringup')
     world_file  = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
 
-    # ── Gazebo ─────────────────────────────────────────────────
+    # ── Gazebo Harmonic ────────────────────────────────────────
     gazebo = ExecuteProcess(
-        cmd=[
-            'gazebo', '--verbose', world_file,
-            '-s', 'libgazebo_ros_factory.so',
-            '-s', 'libgazebo_ros_init.so',
-        ],
+        cmd=['gz', 'sim', '--verbose', world_file],
+        output='screen'
+    )
+
+    # /clock 브리지 (sim time 동기화)
+    clock_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
         output='screen'
     )
 
@@ -64,9 +68,9 @@ def generate_launch_description():
         output='screen'
     )
     spawn_robot = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        arguments=['-entity', 'turtlebot3_waffle_pi', '-file', urdf_path,
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-name', 'turtlebot3_waffle_pi', '-file', urdf_path,
                    '-x', '0.0', '-y', '0.0', '-z', '0.01'],
         output='screen'
     )
@@ -159,6 +163,7 @@ def generate_launch_description():
         declare_headless,
         set_tb3_model,
         gazebo,
+        clock_bridge,
         robot_state_publisher,
         spawn_robot,
         slam,

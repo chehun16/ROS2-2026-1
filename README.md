@@ -171,9 +171,11 @@ sudo apt install -y \
   ros-jazzy-robot-state-publisher \
   ros-jazzy-vision-msgs
 
-# YOLOv8
-pip3 install --upgrade pip
-pip3 install "ultralytics>=8.0.0"
+# catkin_pkg (required for colcon build)
+sudo apt install -y python3-catkin-pkg
+
+# YOLOv8 (Ubuntu 24.04: use --break-system-packages)
+pip3 install --break-system-packages "ultralytics>=8.0.0"
 
 # Initialize rosdep (first time only)
 sudo rosdep init
@@ -190,8 +192,8 @@ cd ~/ROS2-2026-1/apex_ws
 # Auto-install dependencies
 rosdep install --from-paths src --ignore-src -r -y
 
-# Build
-colcon build --symlink-install
+# Build (COLCON_PYTHON_EXECUTABLE required if conda is installed)
+COLCON_PYTHON_EXECUTABLE=/usr/bin/python3 colcon build --symlink-install
 
 # Register environment variable
 echo "source ~/ROS2-2026-1/apex_ws/install/setup.bash" >> ~/.bashrc
@@ -219,10 +221,9 @@ ros2 launch bringup demo.launch.py
 ### Individual Node Launch (for debugging)
 
 ```bash
-# Terminal 1: Gazebo
+# Terminal 1: Gazebo Harmonic
 export TURTLEBOT3_MODEL=waffle_pi
-gazebo --verbose ~/ROS2-2026-1/apex_ws/install/bringup/share/bringup/worlds/apex_world.world \
-  -s libgazebo_ros_factory.so -s libgazebo_ros_init.so
+gz sim --verbose ~/ROS2-2026-1/apex_ws/install/bringup/share/bringup/worlds/apex_world.world
 
 # Terminal 2: SLAM
 ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
@@ -313,12 +314,32 @@ apex_ws/src/
 ```bash
 cd ~/ROS2-2026-1/apex_ws
 rm -rf build/ install/ log/
-colcon build --symlink-install
+COLCON_PYTHON_EXECUTABLE=/usr/bin/python3 colcon build --symlink-install
+```
+
+**`No module named 'catkin_pkg'` during build**
+```bash
+# Occurs when conda is installed — conda python is picked up instead of system python
+sudo apt install python3-catkin-pkg
+COLCON_PYTHON_EXECUTABLE=/usr/bin/python3 colcon build --symlink-install
+```
+
+**`pip3 install` fails with externally-managed-environment**
+```bash
+# Ubuntu 24.04 blocks system-wide pip installs by default
+pip3 install --break-system-packages "ultralytics>=8.0.0"
+```
+
+**`bash: /opt/ros/humble/setup.bash: No such file or directory`**
+```bash
+# Old humble source line left in ~/.bashrc — remove it
+sed -i '/opt\/ros\/humble\/setup.bash/d' ~/.bashrc
+source ~/.bashrc
 ```
 
 **Gazebo won't start**
 ```bash
-killall gzserver gzclient
+killall gz
 ```
 
 **Nav2 fails to come up**
