@@ -217,7 +217,7 @@ local_costmap:
         cost_scaling_factor: 3.0
         inflation_radius: 0.55
 
-# ── Collision Monitor (Jazzy: 새로 추가된 노드) ─────────────────────
+# ── Collision Monitor (Jazzy: 새로 추가된 노드, 비활성화) ───────────
 collision_monitor:
   ros__parameters:
     use_sim_time: true
@@ -225,17 +225,13 @@ collision_monitor:
     odom_frame_id: "odom"
     cmd_vel_in_topic: "cmd_vel_smoothed"
     cmd_vel_out_topic: "cmd_vel"
-    transform_tolerance: 0.5
-    source_timeout: 5.0
+    state_topic: "collision_monitor_state"
+    transform_tolerance: 0.2
+    source_timeout: 1.0
+    base_shift_correction: true
     stop_pub_timeout: 2.0
     polygons: []
-    observation_sources: ["scan"]
-    scan:
-      type: "scan"
-      topic: "/scan"
-      min_height: 0.15
-      max_height: 2.0
-      enabled: true
+    observation_sources: []
 
 lifecycle_manager:
   ros__parameters:
