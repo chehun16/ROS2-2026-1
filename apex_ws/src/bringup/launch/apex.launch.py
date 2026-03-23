@@ -42,7 +42,7 @@ def generate_launch_description():
 
     # ── Gazebo Harmonic: 커스텀 월드로 실행 ───────────────────
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '--verbose', world_file],
+        cmd=['gz', 'sim', '-r', '--verbose', world_file],
         output='screen'
     )
 
