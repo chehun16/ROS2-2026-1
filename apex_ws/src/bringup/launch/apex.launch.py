@@ -41,11 +41,10 @@ def generate_launch_description():
     world_file       = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
 
     # ── Gazebo Harmonic: 커스텀 월드로 실행 ───────────────────
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
-        ),
-        launch_arguments={'gz_args': f'-r --verbose {world_file}'}.items()
+    gazebo = ExecuteProcess(
+        cmd=['gz', 'sim', '-r', '--verbose', world_file],
+        additional_env={'GZ_SIM_RESOURCE_PATH': os.path.join(bringup_dir, 'worlds')},
+        output='screen'
     )
 
     # /clock 브리지 (sim time 동기화)
