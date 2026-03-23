@@ -41,9 +41,11 @@ def generate_launch_description():
     world_file  = os.path.join(bringup_dir, 'worlds', 'apex_world.world')
 
     # ── Gazebo Harmonic ────────────────────────────────────────
+    set_gz_resource_path = SetEnvironmentVariable(
+        'GZ_SIM_RESOURCE_PATH', os.path.join(bringup_dir, 'worlds')
+    )
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '-r', '--verbose', 'apex_world.world'],
-        additional_env={'GZ_SIM_RESOURCE_PATH': os.path.join(bringup_dir, 'worlds')},
+        cmd=['gz', 'sim', '-r', '--verbose', world_file],
         output='screen'
     )
 
@@ -163,6 +165,7 @@ def generate_launch_description():
         declare_use_sim_time,
         declare_headless,
         set_tb3_model,
+        set_gz_resource_path,
         gazebo,
         clock_bridge,
         robot_state_publisher,
