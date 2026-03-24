@@ -1,28 +1,22 @@
 <?xml version="1.0" ?>
 <!--
-  navigate_w_replanning.xml
-
-  spin / backup recovery 없는 최소 BT.
-  spin = 제자리 회전 → 휠 슬립 → 오돔 드리프트 → SLAM 맵 오염 → NavFn 반복 실패.
-  대신 경로 실패 시 global costmap만 초기화하고 재시도.
+  navigate_w_replanning.xml  (최소 BT — spin/backup recovery 없음)
+  경로 실패 시 global costmap clear 후 재시도 2회. 그래도 실패하면 포기.
 -->
 <root BTCPP_format="4" main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
     <RecoveryNode number_of_retries="2" name="NavigateRecovery">
       <PipelineSequence name="NavigateWithReplanning">
         <RateController hz="1.0">
-          <RecoveryNode number_of_retries="1" name="ComputePathRecovery">
-            <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"
-                               error_code_id="{compute_path_error_code}"/>
-            <ClearEntireCostmap name="ClearGlobalCostmap"
-                                service_name="global_costmap/clear_entirely_global_costmap"/>
-          </RecoveryNode>
+          <ComputePathToPose goal="{goal}" path="{path}"
+                             planner_id="GridBased"
+                             error_code_id="{compute_path_error_code}"/>
         </RateController>
         <FollowPath path="{path}" controller_id="FollowPath"
                     goal_checker_id="general_goal_checker"
                     error_code_id="{follow_path_error_code}"/>
       </PipelineSequence>
-      <ClearEntireCostmap name="ClearEntireCostmap"
+      <ClearEntireCostmap name="ClearGlobalCostmap"
                           service_name="global_costmap/clear_entirely_global_costmap"/>
     </RecoveryNode>
   </BehaviorTree>
