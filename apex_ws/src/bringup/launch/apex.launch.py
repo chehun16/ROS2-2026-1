@@ -13,6 +13,7 @@ from launch.actions import (
     IncludeLaunchDescription,
     SetEnvironmentVariable,
     ExecuteProcess,
+    TimerAction,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
@@ -48,8 +49,22 @@ def generate_launch_description():
         '/opt/ros/jazzy/opt/gz_sim_vendor/lib/'
     )
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '-r', '--verbose', world_file],
+        cmd=['gz', 'sim', '--verbose', world_file],
         output='screen'
+    )
+    # Gazebo 가 완전히 로드된 뒤 시뮬레이션 시작 (physics 충돌 방지)
+    unpause_sim = TimerAction(
+        period=5.0,
+        actions=[
+            ExecuteProcess(
+                cmd=['gz', 'service', '-s', '/world/apex_world/control',
+                     '--reqtype', 'gz.msgs.WorldControl',
+                     '--reptype', 'gz.msgs.Boolean',
+                     '--timeout', '2000',
+                     '--req', 'pause: false'],
+                output='screen'
+            )
+        ]
     )
 
     # ROS2 ↔ Gazebo Harmonic 브리지
@@ -228,4 +243,5 @@ def generate_launch_description():
         viz_node,
         semantic_costmap_node,
         rviz_node,
+        unpause_sim,
     ])
