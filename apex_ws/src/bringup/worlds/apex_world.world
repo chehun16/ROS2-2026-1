@@ -300,7 +300,7 @@
         </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
-          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2><fdir1>1 0 0</fdir1></ode></friction></surface>
         </collision>
         <visual name="vis">
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
@@ -326,7 +326,7 @@
         </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
-          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2><fdir1>1 0 0</fdir1></ode></friction></surface>
         </collision>
         <visual name="vis">
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
