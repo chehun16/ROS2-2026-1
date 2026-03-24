@@ -335,7 +335,7 @@
       </link>
 
       <!-- 앞 캐스터 -->
-      <joint name="caster_front_joint" type="ball">
+      <joint name="caster_front_joint" type="fixed">
         <parent>base_link</parent>
         <child>caster_front_link</child>
       </joint>
@@ -347,7 +347,7 @@
       </link>
 
       <!-- 뒤 캐스터 -->
-      <joint name="caster_back_joint" type="ball">
+      <joint name="caster_back_joint" type="fixed">
         <parent>base_link</parent>
         <child>caster_back_link</child>
       </joint>
