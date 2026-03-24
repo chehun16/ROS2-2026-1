@@ -119,14 +119,14 @@ class ExplorerNode(Node):
         free    = (data == 0)
         unknown = (data == -1)
 
-        # 4방향으로 free 셀이 인접한 unknown 셀 → frontier
-        free_adj = (
-            np.roll(free,  1, axis=0) |
-            np.roll(free, -1, axis=0) |
-            np.roll(free,  1, axis=1) |
-            np.roll(free, -1, axis=1)
+        # 4방향으로 unknown 셀이 인접한 free 셀 → frontier (free 공간 안에서 선택)
+        unknown_adj = (
+            np.roll(unknown,  1, axis=0) |
+            np.roll(unknown, -1, axis=0) |
+            np.roll(unknown,  1, axis=1) |
+            np.roll(unknown, -1, axis=1)
         )
-        frontier_mask = unknown & free_adj
+        frontier_mask = free & unknown_adj
 
         # 테두리 제거 (roll 아티팩트)
         frontier_mask[0, :]  = False
