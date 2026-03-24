@@ -50,6 +50,7 @@ def generate_launch_description():
     )
     gazebo = ExecuteProcess(
         cmd=['gz', 'sim', '--verbose', world_file],
+        additional_env={'GZ_SIM_SYSTEM_PLUGIN_PATH': '/opt/ros/jazzy/opt/gz_sim_vendor/lib/'},
         output='screen'
     )
     # Gazebo 가 완전히 로드된 뒤 시뮬레이션 시작 (physics 충돌 방지)
