@@ -123,7 +123,8 @@ def generate_launch_description():
     nav2_smoother     = Node(package='nav2_smoother',          executable='smoother_server',    output='screen', parameters=[nav2_params])
     nav2_planner      = Node(package='nav2_planner',           executable='planner_server',     output='screen', parameters=[nav2_params])
     nav2_behaviors    = Node(package='nav2_behaviors',         executable='behavior_server',    output='screen', parameters=[nav2_params])
-    nav2_bt           = Node(package='nav2_bt_navigator',      executable='bt_navigator',       output='screen', parameters=[nav2_params])
+    bt_xml = os.path.join(bringup_dir, 'config', 'navigate_w_replanning.xml')
+    nav2_bt           = Node(package='nav2_bt_navigator',      executable='bt_navigator',       output='screen', parameters=[nav2_params, {'default_nav_to_pose_bt_xml': bt_xml}])
     nav2_waypoint     = Node(package='nav2_waypoint_follower', executable='waypoint_follower',  output='screen', parameters=[nav2_params])
     nav2_vel_smoother = Node(package='nav2_velocity_smoother', executable='velocity_smoother',  output='screen', parameters=[nav2_params])
     nav2_lifecycle    = Node(

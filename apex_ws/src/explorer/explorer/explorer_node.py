@@ -28,9 +28,14 @@ class ExplorerNode(Node):
 
         self.declare_parameter('exploration_rate', 1.0)   # Hz (맵 크기 고려해 낮게)
         self.declare_parameter('min_frontier_distance', 0.5)  # 너무 가까운 frontier 무시 (m)
+        self.declare_parameter('startup_delay_sec', 20.0)  # SLAM 안정화 대기 시간 (초)
 
         exploration_rate        = self.get_parameter('exploration_rate').value
         self.min_frontier_dist  = self.get_parameter('min_frontier_distance').value
+        startup_delay           = self.get_parameter('startup_delay_sec').value
+
+        self._startup_done = False
+        self.create_timer(startup_delay, self._startup_done_cb)
 
         # TF — 로봇 현재 위치 조회용
         self.tf_buffer   = tf2_ros.Buffer()
@@ -57,7 +62,11 @@ class ExplorerNode(Node):
         self.target_position = Point()
         self.state = 'IDLE'
 
-        self.get_logger().info('ExplorerNode started')
+        self.get_logger().info(f'ExplorerNode started — waiting {startup_delay:.0f}s for SLAM to stabilize...')
+
+    def _startup_done_cb(self):
+        self._startup_done = True
+        self.get_logger().info('ExplorerNode startup delay done — exploration enabled')
 
     # ── 콜백 ──────────────────────────────────────────────────────────
 
@@ -86,7 +95,7 @@ class ExplorerNode(Node):
     # ── 탐색 루프 ─────────────────────────────────────────────────────
 
     def explore(self):
-        if self.map_data is None:
+        if not self._startup_done or self.map_data is None:
             return
 
         if self.target_found:

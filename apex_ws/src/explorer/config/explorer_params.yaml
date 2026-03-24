@@ -2,3 +2,4 @@ explorer_node:
   ros__parameters:
     exploration_rate: 1.0          # frontier 탐색 주기 (Hz) — 낮을수록 CPU 절약
     min_frontier_distance: 1.0     # 이 거리 이내 frontier는 무시 (m)
+    startup_delay_sec: 20.0        # SLAM이 안정적인 맵을 만들 때까지 대기 (초)
