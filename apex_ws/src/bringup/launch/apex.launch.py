@@ -49,7 +49,7 @@ def generate_launch_description():
         '/opt/ros/jazzy/opt/gz_sim_vendor/lib/'
     )
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '--verbose', world_file],
+        cmd=['gz', 'sim', '-v', '4', world_file],
         additional_env={'GZ_SIM_SYSTEM_PLUGIN_PATH': '/opt/ros/jazzy/opt/gz_sim_vendor/lib/'},
         output='screen'
     )
