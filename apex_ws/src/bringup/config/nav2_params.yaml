@@ -119,24 +119,10 @@ global_costmap:
       track_unknown_space: true
       robot_radius: 0.22
       always_send_full_costmap: true
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      plugins: ["static_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: true
-      obstacle_layer:
-        plugin: "nav2_costmap_2d::ObstacleLayer"
-        enabled: true
-        observation_sources: scan
-        scan:
-          topic: /scan
-          max_obstacle_height: 2.0
-          clearing: true
-          marking: true
-          data_type: "LaserScan"
-          raytrace_max_range: 3.0
-          raytrace_min_range: 0.0
-          obstacle_max_range: 2.5
-          obstacle_min_range: 0.0
       # ── Semantic Layer: AVOID 물체 주변 가상 장애물 ─────────────
       semantic_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
