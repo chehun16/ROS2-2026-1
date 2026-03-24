@@ -55,7 +55,7 @@ controller_server:
       use_cost_regulated_linear_velocity_scaling: false
       regulated_linear_scaling_min_radius: 0.9
       regulated_linear_scaling_min_speed: 0.25
-      use_rotate_to_heading: true
+      use_rotate_to_heading: false
       allow_reversing: false
       rotate_to_heading_min_angle: 0.785
       max_angular_accel: 3.2
@@ -67,7 +67,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner::NavfnPlanner"
-      tolerance: 0.15
+      tolerance: 0.3
       use_astar: false
       allow_unknown: true
 
@@ -119,7 +119,7 @@ global_costmap:
       track_unknown_space: true
       robot_radius: 0.22
       always_send_full_costmap: true
-      plugins: ["static_layer", "obstacle_layer", "semantic_layer", "inflation_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: true
@@ -170,7 +170,7 @@ local_costmap:
       resolution: 0.05
       robot_radius: 0.22
       always_send_full_costmap: true
-      plugins: ["obstacle_layer", "semantic_layer", "inflation_layer"]
+      plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
