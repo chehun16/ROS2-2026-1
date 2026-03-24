@@ -176,6 +176,24 @@ def generate_launch_description():
         parameters=[{'use_sim_time': use_sim_time}], output='screen'
     )
 
+    # ── Gazebo 센서 frame_id 보정용 static TF ──────────────────
+    scan_frame_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='scan_frame_bridge',
+        arguments=['--frame-id', 'base_scan',
+                   '--child-frame-id', 'turtlebot3_waffle_pi/base_scan/lidar'],
+        output='screen'
+    )
+    camera_frame_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_frame_bridge',
+        arguments=['--frame-id', 'camera_rgb_optical_frame',
+                   '--child-frame-id', 'turtlebot3_waffle_pi/camera_rgb_frame/camera'],
+        output='screen'
+    )
+
     # ── RViz2 ──────────────────────────────────────────────────
     rviz_node = Node(
         package='rviz2', executable='rviz2', name='rviz2',
@@ -223,6 +241,8 @@ def generate_launch_description():
         viz_node,
         semantic_node,
         rviz_node,
+        scan_frame_tf,
+        camera_frame_tf,
         unpause_sim,
         demo_node,
     ])

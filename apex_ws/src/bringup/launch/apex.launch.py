@@ -210,6 +210,26 @@ def generate_launch_description():
         output='screen'
     )
 
+    # ── Gazebo 센서 frame_id 보정용 static TF ──────────────────
+    # gz sim이 센서 frame_id를 'model/link/sensor' 형식으로 내보내므로
+    # SLAM/Nav2가 TF를 찾을 수 있도록 base_scan → scoped frame 연결
+    scan_frame_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='scan_frame_bridge',
+        arguments=['--frame-id', 'base_scan',
+                   '--child-frame-id', 'turtlebot3_waffle_pi/base_scan/lidar'],
+        output='screen'
+    )
+    camera_frame_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_frame_bridge',
+        arguments=['--frame-id', 'camera_rgb_optical_frame',
+                   '--child-frame-id', 'turtlebot3_waffle_pi/camera_rgb_frame/camera'],
+        output='screen'
+    )
+
     # ── RViz2 ──────────────────────────────────────────────────
     rviz_node = Node(
         package='rviz2',
@@ -245,5 +265,7 @@ def generate_launch_description():
         viz_node,
         semantic_costmap_node,
         rviz_node,
+        scan_frame_tf,
+        camera_frame_tf,
         unpause_sim,
     ])
