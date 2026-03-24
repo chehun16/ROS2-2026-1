@@ -82,7 +82,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner::NavfnPlanner"
-      tolerance: 0.5
+      tolerance: 0.2
       use_astar: false
       allow_unknown: true
 
@@ -167,8 +167,8 @@ global_costmap:
           obstacle_min_range: 0.0
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 5.0
+        inflation_radius: 0.35
 
 # ── Local Costmap ───────────────────────────────────────────────────
 local_costmap:
@@ -214,8 +214,8 @@ local_costmap:
           obstacle_min_range: 0.0
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 5.0
+        inflation_radius: 0.35
 
 # ── Collision Monitor (Jazzy: 새로 추가된 노드, 비활성화) ───────────
 collision_monitor:
