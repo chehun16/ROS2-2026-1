@@ -43,6 +43,11 @@ def generate_launch_description():
     )
 
     # ── Gazebo Harmonic ────────────────────────────────────────
+    # 외부 플러그인 경로 (diff-drive, joint-state-publisher 등)
+    set_gz_plugin_path = SetEnvironmentVariable(
+        'GZ_SIM_SYSTEM_PLUGIN_PATH',
+        '/opt/ros/jazzy/opt/gz_sim_vendor/lib/'
+    )
     gazebo = ExecuteProcess(
         cmd=['gz', 'sim', '-r', '--verbose', world_file],
         output='screen'
@@ -183,6 +188,7 @@ def generate_launch_description():
         declare_use_sim_time,
         declare_headless,
         set_tb3_model,
+        set_gz_plugin_path,
         gazebo,
         clock_bridge,
         robot_state_publisher,

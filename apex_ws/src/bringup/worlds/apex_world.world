@@ -422,7 +422,7 @@
 
       <!-- Gazebo Harmonic: DiffDrive (odom + TF 자동 publish) -->
       <!-- 절대 경로 토픽 (/cmd_vel, /odom, /tf) → ros_gz_bridge와 직접 매칭 -->
-      <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <plugin filename="gz-sim8-diff-drive-system" name="gz::sim::systems::DiffDrive">
         <left_joint>wheel_left_joint</left_joint>
         <right_joint>wheel_right_joint</right_joint>
         <wheel_separation>0.287</wheel_separation>
@@ -438,7 +438,7 @@
       </plugin>
 
       <!-- Gazebo Harmonic: 바퀴 조인트 상태 publish -->
-      <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <plugin filename="gz-sim8-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
         <topic>/joint_states</topic>
         <joint_name>wheel_left_joint</joint_name>
         <joint_name>wheel_right_joint</joint_name>
