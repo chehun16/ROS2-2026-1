@@ -162,7 +162,18 @@ class ExplorerNode(Node):
             filtered = frontiers   # 전부 가까우면 그냥 전체에서 선택
 
         dists = np.array([(fx - rx) ** 2 + (fy - ry) ** 2 for fx, fy in filtered])
-        return filtered[int(np.argmin(dists))]
+        fx, fy = filtered[int(np.argmin(dists))]
+
+        # frontier 경계에서 로봇 방향으로 0.4m 이동 → costmap inflation 영역 밖 보장
+        dx, dy = rx - fx, ry - fy
+        dist = float(np.sqrt(dx ** 2 + dy ** 2))
+        if dist > 0.01:
+            offset = min(0.4, dist - 0.6)   # 로봇으로부터 최소 0.6m 유지
+            if offset > 0:
+                fx = fx + offset * dx / dist
+                fy = fy + offset * dy / dist
+
+        return (fx, fy)
 
     def _get_robot_position(self) -> tuple:
         """TF에서 map 기준 로봇 위치를 가져옴. 실패 시 원점 반환."""
