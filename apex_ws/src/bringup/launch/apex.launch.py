@@ -236,7 +236,8 @@ def generate_launch_description():
         nav2_bt,
         nav2_waypoint,
         nav2_vel_smoother,
-        nav2_lifecycle,
+        # Nav2 lifecycle manager는 odom이 준비된 후 시작 (unpause 7초 후)
+        TimerAction(period=7.0, actions=[nav2_lifecycle]),
         slam_node,
         perception_node,
         explorer_node,

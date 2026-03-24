@@ -215,7 +215,7 @@ def generate_launch_description():
         nav2_bt,
         nav2_waypoint,
         nav2_vel_smoother,
-        nav2_lifecycle,
+        TimerAction(period=7.0, actions=[nav2_lifecycle]),
         slam_node,
         perception_node,
         explorer_node,
