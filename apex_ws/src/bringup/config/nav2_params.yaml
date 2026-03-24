@@ -72,8 +72,8 @@ controller_server:
       GoalAlign.forward_point_distance: 0.1
       PathDist.scale: 32.0
       GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
+      RotateToGoal.scale: 16.0
+      RotateToGoal.slowing_factor: 2.0
       RotateToGoal.lookahead_time: -1.0
 
 planner_server:
@@ -168,7 +168,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
-        inflation_radius: 0.35
+        inflation_radius: 0.25
 
 # ── Local Costmap ───────────────────────────────────────────────────
 local_costmap:
@@ -215,7 +215,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
-        inflation_radius: 0.35
+        inflation_radius: 0.25
 
 # ── Collision Monitor (Jazzy: 새로 추가된 노드, 비활성화) ───────────
 collision_monitor:
