@@ -131,22 +131,25 @@ global_costmap:
       track_unknown_space: true
       robot_radius: 0.17
       always_send_full_costmap: true
-      plugins: ["static_layer", "inflation_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: true
-      # ── Semantic Layer: AVOID 물체 주변 가상 장애물 ─────────────
-      semantic_layer:
+      # LiDAR raytrace 클리어링으로 SLAM 맵 오염(false obstacle) 덮어쓰기
+      obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
-        observation_sources: semantic_obstacles
-        semantic_obstacles:
-          topic: /semantic/obstacles
+        combination_method: 0       # overwrite — static_layer의 잘못된 lethal 셀을 클리어
+        observation_sources: scan
+        scan:
+          topic: /scan
           max_obstacle_height: 2.0
-          clearing: false
+          clearing: true
           marking: true
-          data_type: "PointCloud2"
-          obstacle_max_range: 10.0
+          data_type: "LaserScan"
+          raytrace_max_range: 3.5
+          raytrace_min_range: 0.0
+          obstacle_max_range: 3.0
           obstacle_min_range: 0.0
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
