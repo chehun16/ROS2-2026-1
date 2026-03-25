@@ -50,8 +50,8 @@
 
     <!-- 물리 설정 -->
     <physics type="ode">
-      <real_time_update_rate>500.0</real_time_update_rate>
-      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>250.0</real_time_update_rate>
+      <max_step_size>0.004</max_step_size>
       <real_time_factor>1</real_time_factor>
     </physics>
 
@@ -191,7 +191,7 @@
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
           <surface>
             <friction><ode><mu>5.0</mu><mu2>5.0</mu2></ode></friction>
-            <contact><ode><kp>1e6</kp><kd>10</kd><max_vel>0.1</max_vel><min_depth>0.001</min_depth></ode></contact>
+            <contact><ode><kp>1e8</kp><kd>1</kd><max_vel>0.01</max_vel><min_depth>0.001</min_depth></ode></contact>
           </surface>
         </collision>
         <visual name="vis">
@@ -220,7 +220,7 @@
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
           <surface>
             <friction><ode><mu>5.0</mu><mu2>5.0</mu2></ode></friction>
-            <contact><ode><kp>1e6</kp><kd>10</kd><max_vel>0.1</max_vel><min_depth>0.001</min_depth></ode></contact>
+            <contact><ode><kp>1e8</kp><kd>1</kd><max_vel>0.01</max_vel><min_depth>0.001</min_depth></ode></contact>
           </surface>
         </collision>
         <visual name="vis">
@@ -291,7 +291,7 @@
         <sensor name="camera" type="camera">
           <topic>/camera/image_raw</topic>
           <gz_frame_id>camera_rgb_optical_frame</gz_frame_id>
-          <update_rate>30</update_rate>
+          <update_rate>10</update_rate>
           <camera>
             <horizontal_fov>1.3962634015954636</horizontal_fov>
             <image><width>640</width><height>480</height><format>RGB_INT8</format></image>

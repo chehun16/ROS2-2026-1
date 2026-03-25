@@ -35,7 +35,7 @@ class ExplorerNode(Node):
         startup_delay           = self.get_parameter('startup_delay_sec').value
 
         self._startup_done = False
-        self.create_timer(startup_delay, self._startup_done_cb)
+        self._startup_timer = self.create_timer(startup_delay, self._startup_done_cb)
 
         # TF — 로봇 현재 위치 조회용
         self.tf_buffer   = tf2_ros.Buffer()
@@ -66,6 +66,7 @@ class ExplorerNode(Node):
 
     def _startup_done_cb(self):
         self._startup_done = True
+        self._startup_timer.cancel()
         self.get_logger().info('ExplorerNode startup delay done — exploration enabled')
 
     # ── 콜백 ──────────────────────────────────────────────────────────
