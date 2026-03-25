@@ -33,13 +33,13 @@
       </attenuation>
     </light>
 
-    <!-- 바닥 -->
+    <!-- 바닥 (마찰 높임 — 바퀴 그립 확보) -->
     <model name="ground_plane">
       <static>true</static>
       <link name="link">
         <collision name="col">
           <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
-          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+          <surface><friction><ode><mu>5.0</mu><mu2>5.0</mu2></ode></friction></surface>
         </collision>
         <visual name="vis">
           <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
@@ -50,133 +50,72 @@
 
     <!-- 물리 설정 -->
     <physics type="ode">
-      <real_time_update_rate>1000.0</real_time_update_rate>
+      <real_time_update_rate>500.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
     </physics>
 
     <!--
-      환경 레이아웃 (10×10m):
+      단순화 레이아웃 (6×6m):
 
-          -5          0    +1          +5
-      +5  +─────────────────────────────+
-          │  [can2]         │  [can4]  │
-          │                 │          │
-          │  [table2]  gap  │  [can5]  │
-      +1  │                 ╵          │
-          │        [box1]              │
-       0  │   ●robot                   │
-          │        [box2]   ╷          │
-      -1  │                 │          │
-          │  [can1]  [box3] │  [can3]  │
-          │                 │  [table1]│
-          │  [can_c] [box4] │          │
-      -5  +─────────────────────────────+
+          -3          0          +3
+      +3  +──────────────────────+
+          │                      │
+          │   [table]            │
+       0  │      ● robot         │
+          │            [can]     │
+      -3  +──────────────────────+
 
-      내부 격벽: x=+1.0, y=-5 ~ y=+0.8 (북쪽에 3.2m 통로)
-      로봇이 서쪽에서 출발해 통로를 통해 동쪽 탐색
+      장애물 없음 — 로봇이 자유롭게 탐색
     -->
 
-    <!-- ── 외벽 (10×10m 방) ──────────────────────────────── -->
+    <!-- ── 외벽 (6×6m 방) ──────────────────────────────── -->
     <model name="wall_north">
       <static>true</static>
-      <pose>0 5 0.5 0 0 0</pose>
+      <pose>0 3 0.5 0 0 0</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
           <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_south">
       <static>true</static>
-      <pose>0 -5 0.5 0 0 0</pose>
+      <pose>0 -3 0.5 0 0 0</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
           <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_east">
       <static>true</static>
-      <pose>5 0 0.5 0 0 1.5708</pose>
+      <pose>3 0 0.5 0 0 1.5708</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
           <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
     <model name="wall_west">
       <static>true</static>
-      <pose>-5 0 0.5 0 0 1.5708</pose>
+      <pose>-3 0 0.5 0 0 1.5708</pose>
       <link name="link">
-        <collision name="col"><geometry><box><size>10 0.1 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>10 0.1 1</size></box></geometry>
+        <collision name="col"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>6 0.1 1</size></box></geometry>
           <material><ambient>0.6 0.6 0.6 1</ambient></material></visual>
       </link>
     </model>
 
-    <!-- ── 내부 격벽: x=1.0, y=-5 ~ y=-0.8 ───────────────── -->
-    <model name="partition_wall">
-      <static>true</static>
-      <pose>1.0 -2.9 0.5 0 0 0</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.1 4.2 1</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.1 4.2 1</size></box></geometry>
-          <material><ambient>0.7 0.5 0.3 1</ambient></material></visual>
-      </link>
-    </model>
-
-    <!-- ── 내부 박스 장애물 ──────────────────────────────── -->
-    <model name="box_obstacle_1">
-      <static>true</static>
-      <pose>-0.5 0.8 0.3 0 0 0.4</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.6 0.6 0.6</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.6 0.6 0.6</size></box></geometry>
-          <material><ambient>0.4 0.2 0.1 1</ambient></material></visual>
-      </link>
-    </model>
-
-    <model name="box_obstacle_2">
-      <static>true</static>
-      <pose>-1.5 -0.5 0.3 0 0 0</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.8 0.3 0.6</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.8 0.3 0.6</size></box></geometry>
-          <material><ambient>0.3 0.3 0.5 1</ambient></material></visual>
-      </link>
-    </model>
-
-    <model name="box_obstacle_3">
-      <static>true</static>
-      <pose>-2.0 -3.0 0.3 0 0 0.8</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.5 0.5 0.6</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.5 0.5 0.6</size></box></geometry>
-          <material><ambient>0.2 0.4 0.2 1</ambient></material></visual>
-      </link>
-    </model>
-
-    <model name="box_obstacle_4">
-      <static>true</static>
-      <pose>-0.8 -2.5 0.3 0 0 0.2</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.4 0.7 0.6</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.4 0.7 0.6</size></box></geometry>
-          <material><ambient>0.5 0.4 0.1 1</ambient></material></visual>
-      </link>
-    </model>
-
-    <!-- ── APPROACH 탐지 목표: coke_can × 5 (빨간 원기둥) ──
-         YOLO yolov8n 기준 "bottle" 클래스로 탐지
-    ─────────────────────────────────────────────────────── -->
-
+    <!-- ── APPROACH 탐지 목표: coke_can (빨간 원기둥) ──
+         YOLO "bottle" 클래스로 탐지
+    ─────────────────────────────────────────────────── -->
     <model name="coke_can_1">
       <static>true</static>
-      <pose>-3.5 -3.5 0.06 0 0 0</pose>
+      <pose>1.5 -1.5 0.06 0 0 0</pose>
       <link name="link">
         <collision name="col"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry></collision>
         <visual name="vis"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry>
@@ -184,63 +123,12 @@
       </link>
     </model>
 
-    <model name="coke_can_2">
-      <static>true</static>
-      <pose>-3.0 3.5 0.06 0 0 1.0</pose>
-      <link name="link">
-        <collision name="col"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry></collision>
-        <visual name="vis"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry>
-          <material><ambient>0.8 0.1 0.1 1</ambient><diffuse>0.8 0.1 0.1 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <model name="coke_can_3">
-      <static>true</static>
-      <pose>3.0 -3.0 0.06 0 0 0.5</pose>
-      <link name="link">
-        <collision name="col"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry></collision>
-        <visual name="vis"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry>
-          <material><ambient>0.8 0.1 0.1 1</ambient><diffuse>0.8 0.1 0.1 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <model name="coke_can_4">
-      <static>true</static>
-      <pose>3.5 3.0 0.06 0 0 2.0</pose>
-      <link name="link">
-        <collision name="col"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry></collision>
-        <visual name="vis"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry>
-          <material><ambient>0.8 0.1 0.1 1</ambient><diffuse>0.8 0.1 0.1 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <model name="coke_can_5">
-      <static>true</static>
-      <pose>2.0 1.5 0.06 0 0 0</pose>
-      <link name="link">
-        <collision name="col"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry></collision>
-        <visual name="vis"><geometry><cylinder><radius>0.033</radius><length>0.12</length></cylinder></geometry>
-          <material><ambient>0.8 0.1 0.1 1</ambient><diffuse>0.8 0.1 0.1 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <!-- ── AVOID 목표: cafe_table × 2 (갈색 박스) ───────────
-         YOLO "dining table" 클래스로 탐지 시 Costmap 장애물 주입
-    ─────────────────────────────────────────────────────── -->
-
+    <!-- ── AVOID 목표: cafe_table (갈색 박스) ────────────
+         YOLO "dining table" 클래스로 탐지 시 장애물 주입
+    ─────────────────────────────────────────────────── -->
     <model name="cafe_table_1">
       <static>true</static>
-      <pose>2.5 -1.5 0.4 0 0 0</pose>
-      <link name="link">
-        <collision name="col"><geometry><box><size>0.9 0.9 0.8</size></box></geometry></collision>
-        <visual name="vis"><geometry><box><size>0.9 0.9 0.8</size></box></geometry>
-          <material><ambient>0.5 0.35 0.2 1</ambient><diffuse>0.5 0.35 0.2 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <model name="cafe_table_2">
-      <static>true</static>
-      <pose>-2.5 1.5 0.4 0 0 1.5708</pose>
+      <pose>-1.5 1.5 0.4 0 0 0</pose>
       <link name="link">
         <collision name="col"><geometry><box><size>0.9 0.9 0.8</size></box></geometry></collision>
         <visual name="vis"><geometry><box><size>0.9 0.9 0.8</size></box></geometry>
@@ -430,7 +318,6 @@
       </link>
 
       <!-- Gazebo Harmonic: DiffDrive (odom + TF 자동 publish) -->
-      <!-- 절대 경로 토픽 (/cmd_vel, /odom, /tf) → ros_gz_bridge와 직접 매칭 -->
       <plugin filename="gz-sim8-diff-drive-system" name="gz::sim::systems::DiffDrive">
         <left_joint>wheel_left_joint</left_joint>
         <right_joint>wheel_right_joint</right_joint>

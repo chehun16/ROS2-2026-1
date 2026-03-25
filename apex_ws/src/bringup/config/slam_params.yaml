@@ -4,7 +4,7 @@ slam_toolbox:
     ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
     ceres_preconditioner: SCHUR_JACOBI
     resolution: 0.05
-    max_laser_range: 20.0
+    max_laser_range: 3.5
     minimum_time_interval: 0.5
     transform_timeout: 0.2
     tf_buffer_duration: 30.0
