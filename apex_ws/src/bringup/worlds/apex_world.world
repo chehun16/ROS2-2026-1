@@ -191,7 +191,7 @@
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
           <surface>
             <friction><ode><mu>5.0</mu><mu2>5.0</mu2></ode></friction>
-            <contact><ode><kp>1e8</kp><kd>1</kd><max_vel>0.01</max_vel><min_depth>0.001</min_depth></ode></contact>
+            <contact><ode><kp>1e5</kp><kd>100</kd><max_vel>0.1</max_vel><min_depth>0.001</min_depth></ode></contact>
           </surface>
         </collision>
         <visual name="vis">
@@ -220,7 +220,7 @@
           <geometry><cylinder><radius>0.033</radius><length>0.018</length></cylinder></geometry>
           <surface>
             <friction><ode><mu>5.0</mu><mu2>5.0</mu2></ode></friction>
-            <contact><ode><kp>1e8</kp><kd>1</kd><max_vel>0.01</max_vel><min_depth>0.001</min_depth></ode></contact>
+            <contact><ode><kp>1e5</kp><kd>100</kd><max_vel>0.1</max_vel><min_depth>0.001</min_depth></ode></contact>
           </surface>
         </collision>
         <visual name="vis">
