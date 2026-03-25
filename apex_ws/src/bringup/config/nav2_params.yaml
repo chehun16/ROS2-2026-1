@@ -66,7 +66,7 @@ planner_server:
     use_sim_time: true
     planner_plugins: ["GridBased"]
     GridBased:
-      plugin: "nav2_smac_planner::SmacPlanner2d"
+      plugin: "nav2_smac_planner::SmacPlanner2D"
       tolerance: 0.3
       downsample_costmap: false
       downsampling_factor: 1
